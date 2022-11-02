@@ -12,8 +12,9 @@ int	main(void)
 	// t_s	test;
 	fd = open("test.dict", O_RDONLY);
 	// printf("%d\n", test.comptbuf);
-	get_next_line(fd);
-	get_next_line(fd);
+	printf("premier = \'%s\'", get_next_line(fd));
+	printf("\ndeuxieme = \'%s\'\n", get_next_line(fd));
+	// get_next_line(fd);
 	// printf("\n%d", test.comptbuf);
 	return (0);
 }

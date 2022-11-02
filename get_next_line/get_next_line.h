@@ -6,7 +6,7 @@
 /*   By: epasquie <epasquie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 11:36:25 by epasquie          #+#    #+#             */
-/*   Updated: 2022/11/01 15:00:47 by epasquie         ###   ########.fr       */
+/*   Updated: 2022/11/02 11:23:11 by epasquie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@
 
 // typedef struct s_s
 // {
-// 	int	comptbuf;
-// 	int	refer;
-// }		t_s;
+// 	char	*stach;
+// 	char	*tmp;
+// }			t_s;
 
 char		*get_next_line(int fd);
-static char	*ft_makechar(char *buf, int compt);
+char		*ft_makechar(char *buf, int compt);
 
 #endif
