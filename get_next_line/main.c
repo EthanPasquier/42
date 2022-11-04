@@ -9,12 +9,13 @@ int	main(void)
 {
 	int	fd;
 
-	// t_s	test;
-	fd = open("test.dict", O_RDONLY);
-	// printf("%d\n", test.comptbuf);
-	printf("premier = \'%s\'", get_next_line(fd));
-	printf("\ndeuxieme = \'%s\'\n", get_next_line(fd));
+	fd = open("test.txt", O_RDONLY);
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
 	// get_next_line(fd);
-	// printf("\n%d", test.comptbuf);
+	// printf("\n\n");
+	// get_next_line(fd);
 	return (0);
 }

@@ -6,40 +6,66 @@
 /*   By: epasquie <epasquie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/01 12:18:44 by epasquie          #+#    #+#             */
-/*   Updated: 2022/11/02 11:15:34 by epasquie         ###   ########.fr       */
+/*   Updated: 2022/11/03 15:53:27 by epasquie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
-// static void	*ft_calloc(size_t count, size_t size)
-// {
-// 	char	*str;
-// 	size_t	i;
 
-// 	str = malloc(size * count);
-// 	if (!str)
-// 		return (0);
-// 	i = -1;
-// 	while (++i < (size * count))
-// 		str[i] = 0;
-// 	return ((void *)str);
-// }
-
-char	*ft_makechar(char *buf, int compt)
+size_t	ft_strlendst(char *str)
 {
-	char		*str;
-	int			i;
-	static int	ptr;
+	size_t	i;
 
 	i = 0;
-	str = malloc((compt) * sizeof(char));
-	while (i < compt)
+	while (str[i])
 	{
-		str[i] = buf[ptr];
-		ptr++;
 		i++;
 	}
-	str[i] = '\0';
-	return (str);
+	return (i);
+}
+
+static size_t	ft_strlensrc(const char *str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i])
+	{
+		i++;
+	}
+	return (i);
+}
+
+size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
+{
+	size_t	len;
+
+	if (dst == 0 && dstsize == 0)
+		return (dstsize + ft_strlensrc(src));
+	len = ft_strlendst(dst);
+	if (dstsize <= len)
+		return (dstsize + ft_strlensrc(src));
+	dstsize -= len + 1;
+	while (*src && *src != '\n' && dstsize-- > 0)
+	{
+		dst[len++] = *src++;
+		dst[len] = 0;
+	}
+	if (*src == '\n' && dstsize-- > 0)
+	{
+		dst[len++] = *src++;
+		dst[len] = 0;
+	}
+	return (len + ft_strlensrc(src));
+}
+
+size_t	ft_strlen(const char *str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
 }
