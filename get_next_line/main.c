@@ -9,13 +9,10 @@ int	main(void)
 {
 	int	fd;
 
-	fd = open("test.txt", O_RDONLY);
+	fd = open("text.txt", O_RDONLY);
 	printf("%s", get_next_line(fd));
 	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	// get_next_line(fd);
-	// printf("\n\n");
-	// get_next_line(fd);
+	// printf("%s", get_next_line(fd));
+	// printf("%s", get_next_line(fd));
 	return (0);
 }

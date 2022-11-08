@@ -6,7 +6,7 @@
 /*   By: epasquie <epasquie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 10:22:10 by epasquie          #+#    #+#             */
-/*   Updated: 2022/11/04 07:22:46 by epasquie         ###   ########.fr       */
+/*   Updated: 2022/11/08 16:57:02 by epasquie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,59 +27,87 @@ char	*ft_strchr(const char *s, int c)
 	return (str);
 }
 
+void	*ft_calloc(int count, int size)
+{
+	char	*str;
+	int		i;
+
+	str = malloc(size * count);
+	if (!str)
+		return (0);
+	i = -1;
+	while (++i < (size * count))
+		str[i] = 0;
+	return ((void *)str);
+}
+
+static char	*ft_sauv(char *lignefinal)
+{
+	char	*sauvegarde;
+	int		compt;
+
+	compt = 0;
+	while (lignefinal[compt] != '\n' && lignefinal[compt] != '\0')
+		compt++;
+	if (lignefinal[compt] == '\0')
+		return (0);
+	sauvegarde = ft_substr(lignefinal, compt + 1, ft_strlen(lignefinal)
+			- compt);
+	if (sauvegarde[0] == '\0')
+	{
+		free(sauvegarde);
+		sauvegarde = NULL;
+	}
+	lignefinal[compt + 1] = '\0';
+	return (sauvegarde);
+}
+
+static char	*ft_parse(int fd, char *buf, char *sauv)
+{
+	int		read_line;
+	char	*tmp;
+
+	read_line = 1;
+	while (read_line > 0)
+	{
+		read_line = read(fd, buf, BUFFER_SIZE);
+		if (read_line == -1)
+			return (0);
+		else if (read_line == 0)
+			break ;
+		buf[read_line] = '\0';
+		if (!sauv)
+			sauv = ft_calloc(sizeof(char), 1);
+		tmp = sauv;
+		sauv = ft_strjoin(tmp, buf);
+		free(tmp);
+		tmp = NULL;
+		if (ft_strchr(buf, '\n'))
+			break ;
+	}
+	return (sauv);
+}
+
 char	*get_next_line(int fd)
 {
-	int			ret;
+	char		*lignefinale;
+	static char	*sauv;
 	char		*buf;
-	char		*sauvfinal;
-	int			i;
-	int			j;
-	static char	*sauvegarde;
-	static int	nbl;
 
-	if (nbl > fd || !BUFFER_SIZE)
-		return (NULL);
-	sauvfinal = malloc(sizeof(char));
-	sauvfinal[0] = 0;
-	if (sauvegarde)
+	if (BUFFER_SIZE <= 0 || fd < 0 || read(fd, 0, 0) < 0)
 	{
-		sauvfinal = ft_strjoin(sauvfinal, sauvegarde);
-		free(sauvegarde);
+		if (sauv > 0) // a patch , mal free
+			free(sauv);
+		return (0);
 	}
-	buf = malloc((BUFFER_SIZE) * sizeof(char));
-	buf[BUFFER_SIZE] = 0;
-	i = 0;
-	while (!(ft_strchr(buf, '\n')))
-	{
-		ret = read(fd, buf, BUFFER_SIZE);
-		if (ret < BUFFER_SIZE)
-			break ;
-		sauvfinal = ft_strjoin(sauvfinal, buf);
-	}
-	if (ret < BUFFER_SIZE)
-	{
-		free(buf);
-		buf = malloc((ret) * sizeof(char));
-		buf[ret] = 0;
-		ret = read(fd, buf, ret);
-		sauvfinal = ft_strjoin(sauvfinal, buf);
-	}
-	while (buf[i] != '\n' && i < BUFFER_SIZE && nbl < fd)
-		i++;
-	i++;
-	if (i < BUFFER_SIZE && nbl < fd)
-	{
-		j = 0;
-		sauvegarde = malloc(((BUFFER_SIZE - i) + 1) * sizeof(char));
-		sauvegarde[(BUFFER_SIZE - i) + 1] = 0;
-		while (i < BUFFER_SIZE)
-		{
-			sauvegarde[j] = buf[i];
-			i++;
-			j++;
-		}
-	}
+	buf = ft_calloc(sizeof(char) * (BUFFER_SIZE + 1), 1);
+	if (!buf)
+		return (0);
+	lignefinale = ft_parse(fd, buf, sauv);
 	free(buf);
-	nbl++;
-	return (sauvfinal);
+	buf = NULL;
+	if (!lignefinale)
+		return (NULL);
+	sauv = ft_sauv(lignefinale);
+	return (lignefinale);
 }
